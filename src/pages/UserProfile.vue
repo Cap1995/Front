@@ -65,6 +65,10 @@
                         {{ iconoRiesgo(resultado.riesgos.psicologico.nivel) }} {{ resultado.riesgos.psicologico.nivel }}
                       </p>
                       <!-- <p class="text-xs text-gray-500 italic mt-1">{{ resultado.riesgos.psicologico.motivos }}</p> -->
+                      <div class="bg-gray-100 p-2 rounded text-xs text-gray-700 mt-2">
+                        <strong>Recomendación:</strong><br>
+                        {{ resultado.riesgos.psicologico.recomendacion }}
+                      </div>
                     </div>
                     <md-button 
                       class="md-accent md-dense mt-4 text-xs font-medium text-purple-700 hover:text-purple-900 transition"
