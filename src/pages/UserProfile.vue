@@ -30,6 +30,12 @@
                 </div>
               </div>
 
+              <md-table-cell md-label="Acciones">
+                <md-button class="md-raised md-primary" @click="descargarReporte(resultado.rut)">
+                  Descargar PDF
+                </md-button>
+              </md-table-cell>
+
               <!-- Riesgos por Área  -->
               <div class="mt-6">
                 <h4 class="text-md font-semibold text-gray-700 mb-4">📊 Riesgos por Área</h4>
@@ -316,7 +322,34 @@ export default {
         console.error('❌ Error al guardar información:', error);
         alert('❌ Error al guardar información.');
       }
+    },
+
+    async descargarReporte(rut){
+      try{
+        const response = await fetch (`http://localhost:8000/reporte/${rut}`);
+        if (!response.ok){
+          throw new Error("Error al descargar el PDF");
+        }
+
+        //convierte la respuesta a un blob
+        const blob = await response.blob();
+
+        //crea una url para el blob y descargarlo
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `reporte_${rut}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        window.URL.revokeObjectURL(url);
+      }catch(error){
+        console.error("❌ Error al descargar el reporte:", error)
+      }
     }
+
+
   },
 };
 </script>
