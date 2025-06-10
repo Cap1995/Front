@@ -55,6 +55,12 @@
                     >
                       📄 Ver notas
                     </md-button>
+                    <md-button 
+                      class="md-accent md-dense mt-4 text-xs font-medium text-purple-700 hover:text-purple-900 transition"
+                      @click="mostrarModalApoyoAcademico = true"
+                      >
+                       📄 Ver Apoyos Academicos 
+                    </md-button>
                   </div>
 
                   <!-- Psicológico -->
@@ -157,6 +163,46 @@
       </md-dialog-actions>
     </md-dialog>
 
+    <!-- Modal apoyos academicos -->
+     <md-dialog :md-active="mostrarModalApoyoAcademico" @md-closed="mostrarModalApoyoAcademico = false" class="rounded-xl overflow-hidden shadow-2xl">
+       <md-dialog-title class="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 px-4 flex items-center gap-2">
+          📚 Información de Apoyo Académico
+       </md-dialog-title>
+
+       <md-dialog-content class="bg-white px-4 py-3">
+          <div class="mb-4">
+            <label class="block text-xs font-semibold text-gray-700 mb-1">¿Está recibiendo apoyo?</label>
+            <select v-model="formAcademico.estaRecibiendoApoyo" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:outline-none focus:ring focus:border-blue-400 transition">
+              <option :value="1">Sí</option>
+              <option :value="0">No</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-xs font-semibold text-gray-700 mb-1">Nombre del profesional</label>
+            <input type="text" v-model="formAcademico.nombreProfesional" placeholder="Ej: Prof. Juan Pérez"
+                  class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:outline-none focus:ring focus:border-blue-400 transition" />
+          </div>
+          
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 mb-1">Cantenido Apoyado</label>
+            <textarea v-model="formAcademico.observaciones" rows="3" placeholder="Ingresa tus observaciones aquí"
+                      class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:outline-none focus:ring focus:border-blue-400 transition resize-none"></textarea>
+          </div>
+       </md-dialog-content>
+
+       <md-dialog-actions class="flex justify-end gap-2 p-4 bg-gray-50">
+          <md-button class="md-primary md-raised text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white transition"
+                    @click="guardarFactoresAcademicos">
+                    💾 Guardar
+          </md-button>
+          <md-button class="md-accent md-dense text-xs font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 transition"
+               @click="mostrarModalApoyoAcademico = false">
+            ❌ Cancelar
+          </md-button>
+       </md-dialog-actions>
+     </md-dialog>
+
     <!-- Modal factores psicológicos bajos -->
     <md-dialog :md-active="mostrarFactoresPsicologicos" @md-closed="mostrarFactoresPsicologicos = false">
       <md-dialog-title class="bg-purple-600 text-white font-bold py-2 px-4 rounded-t-xl">
@@ -248,7 +294,16 @@ export default {
         nombreProfesional: '',
         observaciones: ''
       },
-      nivelRiesgoPsico:''
+      nivelRiesgoPsico:'',
+
+      //modal de apoyo academico
+      mostrarModalApoyoAcademico: false,
+      formAcademico:{
+        estaRecibiendoApoyo: 0,
+        nombreProfesional: '',
+        observaciones: ''
+      },
+      nivelRiesgoAcademico: ''
     };
   },
   methods: {
@@ -351,9 +406,32 @@ export default {
       }catch(error){
         console.error("❌ Error al descargar el reporte:", error)
       }
-    }
+    },
 
+    async guardarFactoresAcademicos(){
+      try{
+        const payload = {
+          rut: this.rut,
+          nivel_riesgo: this.nivelRiesgoAcademico,
+          esta_apoyo: this.formAcademico.estaRecibiendoApoyo,
+          profesional: this.formAcademico.nombreProfesional,
+          observaciones: this.formAcademico.observaciones
+        };
+ 
+        await fetch('http://localhost:8000/registrar_factores_academicos/', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
 
+        this.mostrarModalFactoresAcademicos = false;
+        alert('✅ Apoyo académico registrado correctamente.');
+
+      }catch(error){
+        console.error('❌ Error al registrar apoyo académico:', error);
+        alert('❌ Error al registrar apoyo académico.');
+      }
+    },
   },
 };
 </script>
