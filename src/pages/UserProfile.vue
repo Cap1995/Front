@@ -48,6 +48,10 @@
                         {{ iconoRiesgo(resultado.riesgos.academico.nivel) }} {{ resultado.riesgos.academico.nivel }}
                       </p>
                       <!-- <p class="text-xs text-gray-500 italic mt-1">{{ resultado.riesgos.academico.motivo }}</p> -->
+                       <div class="bg-gray-100 p-2 rounded text-xs text-gray-700 mt-2">
+                        <strong>Recomendación:</strong><br>
+                        {{ resultado.riesgos.academico.recomendacion }}
+                      </div>
                     </div>
                     <md-button 
                       class="md-accent md-dense mt-4 text-xs font-medium text-blue-700 hover:text-blue-900 transition"
