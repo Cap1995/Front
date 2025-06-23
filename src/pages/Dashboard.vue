@@ -92,6 +92,7 @@
 
 <script>
 import { StatsCard } from '@/components'
+import { obtenerEstudiantesResumen } from '../api/api';
 
 export default {
   components: {
@@ -110,7 +111,7 @@ export default {
   },
   computed: {
     aniosDisponibles() {
-      const anios = [...new Set(this.estudiantes.map(e => e.anio_ingreso))];
+      const anios = [...new Set(this.estudiantes.map(e => e.anioIngreso))];
       return anios.sort();
     },
     carrerasDisponibles() {
@@ -119,9 +120,9 @@ export default {
     },
     estudiantesFiltrados() {
       return this.estudiantes.filter(e => {
-        return (!this.filtroAnio || String(e.anio_ingreso) === String(this.filtroAnio)) &&
-               (!this.filtroCarrera || e.carrera === this.filtroCarrera) &&
-               (!this.filtroRiesgo || e.riesgo === this.filtroRiesgo)
+        return (!this.filtroAnio || String(e.anioIngreso) === String(this.filtroAnio)) &&
+              (!this.filtroCarrera || e.carrera === this.filtroCarrera) &&
+              (!this.filtroRiesgo || e.riesgo === this.filtroRiesgo);
       });
     },
     totalPaginas() {
@@ -134,7 +135,7 @@ export default {
     // 🟡 Este es el nuevo "computed" bien ubicado
     estadisticasFiltradas() {
       const filtrados = this.estudiantes.filter(e => {
-        return !this.filtroAnio || String(e.anio_ingreso) === String(this.filtroAnio);
+        return !this.filtroAnio || String(e.anioIngreso) === String(this.filtroAnio);
       });
 
       const total = filtrados.length;
@@ -189,13 +190,19 @@ export default {
   },
   async mounted() {
     try {
-      const res = await fetch('http://localhost:8000/riesgos_calculados');
-      const data = await res.json();
-      this.estudiantes = data;
-      // Ya no necesitas "statsCards" fijo; usarás el dinámico
+      const res = await obtenerEstudiantesResumen();
+      this.estudiantes = res.data;
     } catch (error) {
       console.error('❌ Error al cargar estadísticas:', error);
     }
+    // try {
+    //   const res = await fetch('http://localhost:8000/riesgos_calculados');
+    //   const data = await res.json();
+    //   this.estudiantes = data;
+    //   // Ya no necesitas "statsCards" fijo; usarás el dinámico
+    // } catch (error) {
+    //   console.error('❌ Error al cargar estadísticas:', error);
+    // }
   },
 }
 </script>

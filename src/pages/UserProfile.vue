@@ -279,6 +279,11 @@
 </template>
 
 <script>
+import { evaluarEstudianteGlobal, 
+        obtenerNotasPorRut, 
+        registrarFactoresPsicologicos, 
+        generarReportePDF, 
+        registrarFactoresAcedmicos } from "@/api/api";
 export default {
   data() {
     return {
@@ -312,34 +317,36 @@ export default {
   },
   methods: {
     async buscarEstudiante() {
-      try {
-        const res = await fetch(`http://localhost:8000/riesgo/global/${this.rut}`);
-        const data = await res.json();
+      try{
+        const {data} = await evaluarEstudianteGlobal(this.rut);
         this.resultado = data;
-
-        //Guardar nivel de riesgo
         this.nivelRiesgoPsico = data.riesgos.psicologico.nivel;
-
-        //cargar datos previos al modal
         this.formPsico.estaRecibiendoApoyo = data.factores_psicologicos.esta_recibiendo_apoyo || 0;
         this.formPsico.nombreProfesional = data.factores_psicologicos.nombre_profesional || "";
         this.formPsico.observaciones = data.factores_psicologicos.observaciones || "";
-
-      } catch (error) {
-        console.error('❌ Error al buscar estudiante:', error);
-        this.resultado = null;
+      }catch(error){
+         console.error("❌ Error al buscar estudiante:", error);
       }
     },
     async verNotas() {
-      try {
-        const res = await fetch(`http://localhost:8000/notas/${this.rut}`);
-        this.notas = await res.json();
+      try{
+        const res = await obtenerNotasPorRut(this.rut);
+        this.notas = res.data;
         this.mostrarNotas = true;
-      } catch (error) {
-        console.error('❌ Error al obtener notas:', error);
+      }catch(error){
+        console.error("❌ Error al obtener notas:", error);
         this.notas = [];
         this.mostrarNotas = true;
       }
+      // try {
+      //   const res = await fetch(`http://localhost:8000/notas/${this.rut}`);
+      //   this.notas = await res.json();
+      //   this.mostrarNotas = true;
+      // } catch (error) {
+      //   console.error('❌ Error al obtener notas:', error);
+      //   this.notas = [];
+      //   this.mostrarNotas = true;
+      // }
     },
     verFactoresPsicologicos() {
       // Procesar el string de motivos para crear un array
@@ -364,40 +371,51 @@ export default {
     },
 
     async guardarFactoresPsico(){
-      try{
+      try {
         const payload = {
           rut: this.rut,
           nivel_riesgo: this.nivelRiesgoPsico,
           esta_apoyo: this.formPsico.estaRecibiendoApoyo,
           profesional: this.formPsico.nombreProfesional,
-          observaciones: this.formPsico.observaciones
+          observaciones: this.formPsico.observaciones,
         };
 
-        await fetch('http://localhost:8000/registrar_factores_psicologicos/',{
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(payload)
-        });
+        await registrarFactoresPsicologicos(payload);
 
         this.mostrarModalFactoresPsico = false;
-        alert('✅ Información registrada correctamente.');
-      }catch(error){
-        console.error('❌ Error al guardar información:', error);
-        alert('❌ Error al guardar información.');
+        alert("✅ Información registrada correctamente.");
+      } catch (error) {
+        console.error("❌ Error al guardar información:", error);
+         alert("❌ Error al guardar información.");
       }
+      // try{
+      //   const payload = {
+      //     rut: this.rut,
+      //     nivel_riesgo: this.nivelRiesgoPsico,
+      //     esta_apoyo: this.formPsico.estaRecibiendoApoyo,
+      //     profesional: this.formPsico.nombreProfesional,
+      //     observaciones: this.formPsico.observaciones
+      //   };
+
+      //   await fetch('http://localhost:8000/registrar_factores_psicologicos/',{
+      //     method: 'POST',
+      //     headers: {'Content-Type': 'application/json'},
+      //     body: JSON.stringify(payload)
+      //   });
+
+      //   this.mostrarModalFactoresPsico = false;
+      //   alert('✅ Información registrada correctamente.');
+      // }catch(error){
+      //   console.error('❌ Error al guardar información:', error);
+      //   alert('❌ Error al guardar información.');
+      // }
     },
 
     async descargarReporte(rut){
-      try{
-        const response = await fetch (`http://localhost:8000/reporte/${rut}`);
-        if (!response.ok){
-          throw new Error("Error al descargar el PDF");
-        }
+      try {
+        const response = await generarReportePDF(rut);
+        const blob = new Blob([response.data], {type: "application/pdf"});
 
-        //convierte la respuesta a un blob
-        const blob = await response.blob();
-
-        //crea una url para el blob y descargarlo
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -407,13 +425,13 @@ export default {
         link.remove();
 
         window.URL.revokeObjectURL(url);
-      }catch(error){
-        console.error("❌ Error al descargar el reporte:", error)
+      } catch (error) {
+        console.error("❌ Error al descargar el reporte:", error);
       }
     },
 
     async guardarFactoresAcademicos(){
-      try{
+      try {
         const payload = {
           rut: this.rut,
           nivel_riesgo: this.nivelRiesgoAcademico,
@@ -421,20 +439,35 @@ export default {
           profesional: this.formAcademico.nombreProfesional,
           observaciones: this.formAcademico.observaciones
         };
- 
-        await fetch('http://localhost:8000/registrar_factores_academicos/', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(payload)
-        });
 
-        this.mostrarModalFactoresAcademicos = false;
+        await registrarFactoresAcedmicos(payload);
         alert('✅ Apoyo académico registrado correctamente.');
-
-      }catch(error){
+      } catch (error) {
         console.error('❌ Error al registrar apoyo académico:', error);
         alert('❌ Error al registrar apoyo académico.');
       }
+      // try{
+      //   const payload = {
+      //     rut: this.rut,
+      //     nivel_riesgo: this.nivelRiesgoAcademico,
+      //     esta_apoyo: this.formAcademico.estaRecibiendoApoyo,
+      //     profesional: this.formAcademico.nombreProfesional,
+      //     observaciones: this.formAcademico.observaciones
+      //   };
+ 
+      //   await fetch('http://localhost:8000/registrar_factores_academicos/', {
+      //     method: 'POST',
+      //     headers: {'Content-Type': 'application/json'},
+      //     body: JSON.stringify(payload)
+      //   });
+
+      //   this.mostrarModalFactoresAcademicos = false;
+      //   alert('✅ Apoyo académico registrado correctamente.');
+
+      // }catch(error){
+      //   console.error('❌ Error al registrar apoyo académico:', error);
+      //   alert('❌ Error al registrar apoyo académico.');
+      // }
     },
   },
 };
