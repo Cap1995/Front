@@ -58,6 +58,24 @@
         </md-card>
       </div>
 
+    <!-- Boton de descarga PDF -->
+    <md-button
+      class="md-raised md-primary"
+      :disabled="descargandoPDF"
+      @click="descargarPDF"
+    >
+      {{ descargandoPDF ? 'Generando PDF...' : 'Descargar PDF' }}
+    </md-button>
+
+     <!-- Boton de descarga EXCEL -->
+    <md-button
+      class="md-raised text-white bg-green-600 hover:bg-green-700"
+      :disabled="descargandoExcel"
+      @click="descargarExcel"
+    >
+      {{ descargandoExcel ? 'Generando Excel...' : 'Descargar Excel' }}
+    </md-button>
+
       <!-- Tabla de estudiantes con paginación -->
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <md-card class="rounded-xl shadow bg-white">
@@ -69,7 +87,7 @@
             <md-table :value="estudiantesFiltradosPaginados" table-header-color="orange">
               <md-table-row slot="md-table-row" slot-scope="{ item }">
                 <md-table-cell md-label="RUN">{{ item.rut }}</md-table-cell>
-                <md-table-cell md-label="Año de ingreso">{{ item.anio_ingreso }}</md-table-cell>
+                <md-table-cell md-label="Año de ingreso">{{ item.anioIngreso }}</md-table-cell>
                 <md-table-cell md-label="Nombre">{{ item.nombre }}</md-table-cell>
                 <md-table-cell md-label="Carrera">{{ item.carrera }}</md-table-cell>
                 <md-table-cell md-label="Nivel Riesgo">
@@ -92,7 +110,7 @@
 
 <script>
 import { StatsCard } from '@/components'
-import { obtenerEstudiantesResumen } from '../api/api';
+import { obtenerEstudiantesResumen, descargarReporteFiltrado, descargarReporteExcel } from '../api/api';
 
 export default {
   components: {
@@ -107,6 +125,8 @@ export default {
       filtroAnio: '',
       filtroCarrera: '',
       filtroRiesgo: '',
+      descargandoPDF: false,
+      descargandoExcel: false,
     }
   },
   computed: {
@@ -132,20 +152,13 @@ export default {
       const inicio = (this.paginaActual - 1) * this.porPagina;
       return this.estudiantesFiltrados.slice(inicio, inicio + this.porPagina);
     },
-    // 🟡 Este es el nuevo "computed" bien ubicado
     estadisticasFiltradas() {
-      const filtrados = this.estudiantes.filter(e => {
-        return !this.filtroAnio || String(e.anioIngreso) === String(this.filtroAnio);
-      });
-
-      const total = filtrados.length;
+      const filtrados = this.estudiantesFiltrados;
       const alto = filtrados.filter(e => e.riesgo === 'Alto').length;
       const medio = filtrados.filter(e => e.riesgo === 'Medio').length;
       const bajo = filtrados.filter(e => e.riesgo === 'Bajo').length;
-
-      return { total, alto, medio, bajo };
+      return { total: filtrados.length, alto, medio, bajo };
     },
-    // 🟡 Tarjetas dinámicas según filtros (¡lo nuevo!)
     statsCardsDinamicas() {
       return [
         {
@@ -187,6 +200,74 @@ export default {
         'text-gray-500': !['Alto', 'Medio', 'Bajo'].includes(nivel)
       }
     },
+
+    async descargarPDF() {
+      this.descargandoPDF = true;
+      try {
+        const filtros = {
+          carrera: this.filtroCarrera || null,
+          anioIngreso: this.filtroAnio || null,
+          nivelRiesgo: this.filtroRiesgo || null,
+        };
+
+        const response = await descargarReporteFiltrado(filtros);
+
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+
+        const nombreArchivo = `reporte_${this.filtroCarrera || 'todas'}_${this.filtroAnio || 'todos'}_${this.filtroRiesgo || 'todos'}.pdf`
+          .toLowerCase()
+          .replace(/\s+/g, '_');
+
+        link.download = nombreArchivo;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('❌ Error al generar el PDF:', error);
+        alert('Error al generar el PDF.');
+      } finally {
+        this.descargandoPDF = false;
+      }
+    },
+
+    async descargarExcel(){
+      this.descargandoExcel = true;
+      try {
+        const filtros = {
+          carrera: this.filtroCarrera || null,
+          anioIngreso: this.filtroAnio || null,
+          nivelRiesgo: this.filtroRiesgo || null,
+        };
+
+        const response = await descargarReporteExcel(filtros);
+
+        const blob = new Blob([response.data], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+
+        const nombreArchivo = `reporte_${this.filtroCarrera || 'todas'}_${this.filtroAnio || 'todos'}_${this.filtroRiesgo || 'todos'}.xlsx`
+          .toLowerCase()
+          .replace(/\s+/g, '_');
+
+        link.download = nombreArchivo;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('❌ Error al generar el Excel:', error);
+        alert('Error al generar el archivo Excel.');
+      }finally{
+        this.descargandoExcel = false
+      }
+    }
   },
   async mounted() {
     try {
@@ -195,14 +276,6 @@ export default {
     } catch (error) {
       console.error('❌ Error al cargar estadísticas:', error);
     }
-    // try {
-    //   const res = await fetch('http://localhost:8000/riesgos_calculados');
-    //   const data = await res.json();
-    //   this.estudiantes = data;
-    //   // Ya no necesitas "statsCards" fijo; usarás el dinámico
-    // } catch (error) {
-    //   console.error('❌ Error al cargar estadísticas:', error);
-    // }
   },
 }
 </script>

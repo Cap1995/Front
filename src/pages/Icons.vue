@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="content">
     <div class="md-layout">
       <div class="md-layout-item">
@@ -38,4 +38,4 @@
 
 <script>
 export default {};
-</script>
+</script> -->

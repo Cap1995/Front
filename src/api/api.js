@@ -44,3 +44,18 @@ export default api;
 //Trae resultados de manera general 
 export const obtenerEstudiantesResumen = () =>
     api.get('/riesgos_calculados');
+
+//Descarga de PDF general
+export const descargarReporteFiltrado = async (filtros) => {
+    const response = await api.post('/api/reportes/descargar', filtros,{
+        responseType: 'blob',
+    });
+    return response;
+};
+
+//Descargar en formato excel
+export const descargarReporteExcel = async (filtros) => {
+    return await api.post("/api/reportes/descargar-excel", filtros,{
+        responseType:"blob",
+    });
+};
