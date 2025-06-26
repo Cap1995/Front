@@ -1,0 +1,14 @@
+diff --git a/node_modules/vue-material/dist/vue-material.js b/node_modules/vue-material/dist/vue-material.js
+index da6363f..7f69d06 100644
+--- a/node_modules/vue-material/dist/vue-material.js
++++ b/node_modules/vue-material/dist/vue-material.js
+@@ -1057,7 +1057,8 @@ exports.default = {
+       this.clearField();
+     },
+     isInvalidValue: function isInvalidValue() {
+-      return this.$el.validity.badInput;
++      const input = this.$el.querySelector('input');
++      return input && input.validity ? input.validity.badInput : false;
+     },
+     setFieldValue: function setFieldValue() {
+       this.MdField.value = this.model;

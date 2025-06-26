@@ -51,11 +51,11 @@ export default {
     },
     sidebarBackgroundImage: {
       type: String,
-      default: require("@/assets/img/sidebar-2.jpg"),
+      //default: require("@/assets/img/sidebar-2.jpg"),
     },
     imgLogo: {
       type: String,
-      default: require("@/assets/img/vue-logo.png"),
+      default: require("@/assets/img/logo_UCM.png"),
     },
     sidebarItemColor: {
       type: String,
