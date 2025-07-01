@@ -59,3 +59,7 @@ export const descargarReporteExcel = async (filtros) => {
         responseType:"blob",
     });
 };
+
+//Actualiza la tabla del dashboard principal
+export const actualizarEvaluacionGeneral = () =>
+    api.post('/evaluacion-general/actualizar');

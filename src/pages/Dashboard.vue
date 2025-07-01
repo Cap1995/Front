@@ -80,8 +80,16 @@
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <md-card class="rounded-xl shadow bg-white">
           <md-card-header data-background-color="blue">
-            <h4 class="title text-white text-lg">Estudiantes</h4>
-            <p class="category text-white/90">Mostrando página {{ paginaActual }} de {{ totalPaginas }}</p>
+            <div class="flex justify-between items-center w-full">
+              <div>
+                <h4 class="title text-white text-lg">Estudiantes</h4>
+                <p class="category text-white/90">Mostrando página {{ paginaActual }} de {{ totalPaginas }}</p>
+              </div>
+              <md-button class="md-raised md-accent" @click="actualizarEvaluacion" :disabled="cargando">
+                <span v-if="!cargando">🔄 Actualizar Evaluación</span>
+                <span v-else>Cargando...</span>
+              </md-button>
+            </div>
           </md-card-header>
           <md-card-content>
             <md-table :value="estudiantesFiltradosPaginados" table-header-color="orange">
@@ -110,7 +118,10 @@
 
 <script>
 import { StatsCard } from '@/components'
-import { obtenerEstudiantesResumen, descargarReporteFiltrado, descargarReporteExcel } from '../api/api';
+import { obtenerEstudiantesResumen, 
+         descargarReporteFiltrado, 
+         descargarReporteExcel,
+        actualizarEvaluacionGeneral } from '../api/api';
 
 export default {
   components: {
@@ -127,6 +138,7 @@ export default {
       filtroRiesgo: '',
       descargandoPDF: false,
       descargandoExcel: false,
+      cargando: false,
     }
   },
   computed: {
@@ -267,15 +279,39 @@ export default {
       }finally{
         this.descargandoExcel = false
       }
+    },
+     async cargarEstudiantes() {
+      try {
+        const response = await obtenerEstudiantesResumen();
+        this.estudiantes = response.data;
+      } catch (error) {
+        console.error("Error al cargar estudiantes:", error);
+        this.$toast.open("Error al cargar los estudiantes");
+      }
+    },
+    async actualizarEvaluacion(){
+      this.cargando = true;
+      try{
+        const response = await actualizarEvaluacionGeneral();
+        this.$toast.open(response.data.mensaje || "Evaluación actualizada");
+        //recarga la tabla
+        await this.cargarEstudiantes();
+      }catch(error){
+        console.error(error);
+        this.$toast.open("error al actualizar la evaluación")
+      } finally {
+        this.cargando = false;
+      }
     }
   },
   async mounted() {
-    try {
-      const res = await obtenerEstudiantesResumen();
-      this.estudiantes = res.data;
-    } catch (error) {
-      console.error('❌ Error al cargar estadísticas:', error);
-    }
+    // try {
+    //   const res = await obtenerEstudiantesResumen();
+    //   this.estudiantes = res.data;
+    // } catch (error) {
+    //   console.error('❌ Error al cargar estadísticas:', error);
+    // }
+    this.cargarEstudiantes();
   },
 }
 </script>
