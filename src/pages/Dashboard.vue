@@ -305,12 +305,6 @@ export default {
     }
   },
   async mounted() {
-    // try {
-    //   const res = await obtenerEstudiantesResumen();
-    //   this.estudiantes = res.data;
-    // } catch (error) {
-    //   console.error('❌ Error al cargar estadísticas:', error);
-    // }
     this.cargarEstudiantes();
   },
 }
