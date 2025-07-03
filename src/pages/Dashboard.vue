@@ -154,7 +154,7 @@ export default {
       return this.estudiantes.filter(e => {
         return (!this.filtroAnio || String(e.anioIngreso) === String(this.filtroAnio)) &&
               (!this.filtroCarrera || e.carrera === this.filtroCarrera) &&
-              (!this.filtroRiesgo || e.riesgo === this.filtroRiesgo);
+              (!this.filtroRiesgo || e.riesgo?.toLowerCase() === this.filtroRiesgo.toLowerCase());
       });
     },
     totalPaginas() {
@@ -166,9 +166,9 @@ export default {
     },
     estadisticasFiltradas() {
       const filtrados = this.estudiantesFiltrados;
-      const alto = filtrados.filter(e => e.riesgo === 'Alto').length;
-      const medio = filtrados.filter(e => e.riesgo === 'Medio').length;
-      const bajo = filtrados.filter(e => e.riesgo === 'Bajo').length;
+      const alto = filtrados.filter(e => e.riesgo?.toLowerCase() === 'alto').length;
+      const medio = filtrados.filter(e => e.riesgo?.toLowerCase() === 'medio').length;
+      const bajo = filtrados.filter(e => e.riesgo?.toLowerCase() === 'bajo').length;
       return { total: filtrados.length, alto, medio, bajo };
     },
     statsCardsDinamicas() {
@@ -205,11 +205,12 @@ export default {
   },
   methods: {
     colorRiesgo(nivel) {
+      const riesgo = nivel?.toLowerCase();
       return {
         'text-red-600': nivel === 'Alto',
         'text-yellow-600': nivel === 'Medio',
         'text-green-600': nivel === 'Bajo',
-        'text-gray-500': !['Alto', 'Medio', 'Bajo'].includes(nivel)
+        'text-gray-500': !['Alto', 'Medio', 'Bajo'].includes(riesgo)
       }
     },
 
@@ -296,6 +297,7 @@ export default {
         this.$toast.open(response.data.mensaje || "Evaluación actualizada");
         //recarga la tabla
         await this.cargarEstudiantes();
+        this.paginaActual = 1;
       }catch(error){
         console.error(error);
         this.$toast.open("error al actualizar la evaluación")

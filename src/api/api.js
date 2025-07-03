@@ -5,8 +5,11 @@ const api = axios.create({
 });
 
 //Api de consulta y evaluacion general
-export const evaluarEstudianteGlobal = (rut) => api.get(`/evaluacion/global/${rut}`);
-
+export const evaluarEstudianteGlobal = (rut, anio) =>
+  api.get(`/evaluacion/global/${rut}`, {
+    params: { anio }
+  });
+  
 //Para mostrar las notas en el modal
 export const obtenerNotasPorRut = (rut) => api.get(`/notas/${rut}`);
 

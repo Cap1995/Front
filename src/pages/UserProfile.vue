@@ -13,6 +13,10 @@
                 <label for="rut">Ingrese RUT</label>
                 <md-input v-model="rut" id="rut" type="text" placeholder="Ej: 12345678" />
               </md-field>
+              <md-field class="w-40">
+              <label for="anio">Año</label>
+              <md-input v-model="anio" id="anio" type="number" placeholder="Ej: 2025" />
+              </md-field>
               <md-button class="md-raised md-primary" @click="buscarEstudiante">Buscar</md-button>
             </div>
 
@@ -30,11 +34,11 @@
                 </div>
               </div>
 
-              <md-table-cell md-label="Acciones">
+              <div class="mt-4">
                 <md-button class="md-raised md-primary" @click="descargarReporte(resultado.rut)">
                   Descargar PDF
                 </md-button>
-              </md-table-cell>
+              </div>
 
               <!-- Riesgos por Área  -->
               <div class="mt-6">
@@ -294,6 +298,7 @@ export default {
       notas: [],
       mostrarFactoresPsicologicos: false,
       factoresPsicologicosBajos: [],
+      anio: new Date().getFullYear(),
 
 
       //modal de registro apoyo psico
@@ -318,7 +323,7 @@ export default {
   methods: {
     async buscarEstudiante() {
       try{
-        const {data} = await evaluarEstudianteGlobal(this.rut);
+        const {data} = await evaluarEstudianteGlobal(this.rut, this.anio);
         this.resultado = data;
         this.nivelRiesgoPsico = data.riesgos.psicologico.nivel;
         this.formPsico.estaRecibiendoApoyo = data.factores_psicologicos.esta_recibiendo_apoyo || 0;
