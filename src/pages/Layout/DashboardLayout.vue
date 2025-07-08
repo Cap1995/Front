@@ -2,10 +2,7 @@
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
     <notifications></notifications>
 
-    <side-bar
-      :sidebar-item-color="sidebarBackground"
-      :sidebar-background-image="sidebarBackgroundImage"
-    >
+    <side-bar :sidebar-item-color="sidebarBackground" :sidebar-background-image="sidebarBackgroundImage">
       <mobile-menu slot="content"></mobile-menu>
       <sidebar-link to="/dashboard">
         <md-icon>dashboard</md-icon>
@@ -26,10 +23,7 @@
     </side-bar>
 
     <div class="main-panel">
-
-      <dashboard-content> </dashboard-content>
-
-      
+      <dashboard-content></dashboard-content>
     </div>
   </div>
 </template>
@@ -38,12 +32,10 @@
 import DashboardContent from "./Content.vue";
 import MobileMenu from "@/pages/Layout/MobileMenu.vue";
 
-
 export default {
   components: {
     DashboardContent,
     MobileMenu,
-   
   },
   data() {
     return {

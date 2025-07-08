@@ -54,12 +54,7 @@
 
 @mixin radial-gradient($extern-color, $center-color) {
   background: $extern-color;
-  background: -moz-radial-gradient(
-    center,
-    ellipse cover,
-    $center-color 0%,
-    $extern-color 100%
-  ); /* FF3.6+ */
+  background: -moz-radial-gradient(center, ellipse cover, $center-color 0%, $extern-color 100%); /* FF3.6+ */
   background: -webkit-gradient(
     radial,
     center center,
@@ -75,23 +70,9 @@
     $center-color 0%,
     $extern-color 100%
   ); /* Chrome10+,Safari5.1+ */
-  background: -o-radial-gradient(
-    center,
-    ellipse cover,
-    $center-color 0%,
-    $extern-color 100%
-  ); /* Opera 12+ */
-  background: -ms-radial-gradient(
-    center,
-    ellipse cover,
-    $center-color 0%,
-    $extern-color 100%
-  ); /* IE10+ */
-  background: radial-gradient(
-    ellipse at center,
-    $center-color 0%,
-    $extern-color 100%
-  ); /* W3C */
+  background: -o-radial-gradient(center, ellipse cover, $center-color 0%, $extern-color 100%); /* Opera 12+ */
+  background: -ms-radial-gradient(center, ellipse cover, $center-color 0%, $extern-color 100%); /* IE10+ */
+  background: radial-gradient(ellipse at center, $center-color 0%, $extern-color 100%); /* W3C */
   background-size: 550% 450%;
 }
 

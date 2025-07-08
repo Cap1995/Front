@@ -39,11 +39,7 @@ export default {
   },
   methods: {
     hideSidebar() {
-      if (
-        this.autoClose &&
-        this.$sidebar &&
-        this.$sidebar.showSidebar === true
-      ) {
+      if (this.autoClose && this.$sidebar && this.$sidebar.showSidebar === true) {
         this.$sidebar.displaySidebar(false);
       }
     },

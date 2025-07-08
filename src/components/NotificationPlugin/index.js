@@ -4,18 +4,14 @@ const NotificationStore = {
   state: [], // here the notifications will be added
 
   removeNotification(timestamp) {
-    const indexToDelete = this.state.findIndex(
-      (n) => n.timestamp === timestamp
-    );
+    const indexToDelete = this.state.findIndex((n) => n.timestamp === timestamp);
     if (indexToDelete !== -1) {
       this.state.splice(indexToDelete, 1);
     }
   },
   addNotification(notification) {
     notification.timestamp = new Date();
-    notification.timestamp.setMilliseconds(
-      notification.timestamp.getMilliseconds() + this.state.length
-    );
+    notification.timestamp.setMilliseconds(notification.timestamp.getMilliseconds() + this.state.length);
     this.state.push(notification);
   },
   notify(notification) {

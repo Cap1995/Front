@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="sidebar"
-    :data-color="sidebarItemColor"
-    :data-image="sidebarBackgroundImage"
-    :style="sidebarStyle"
-  >
+  <div class="sidebar" :data-color="sidebarItemColor" :data-image="sidebarBackgroundImage" :style="sidebarStyle">
     <div class="logo">
       <a href="#" class="simple-text logo-mini">
         <div class="logo-img">
@@ -30,8 +25,7 @@
             :key="link.name + index"
             :to="link.path"
             :link="link"
-          >
-          </sidebar-link>
+          ></sidebar-link>
         </slot>
       </md-list>
     </div>

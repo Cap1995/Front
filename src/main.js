@@ -1,4 +1,3 @@
-
 import Vue from "vue";
 import VueRouter from "vue-router";
 import App from "./App";
@@ -31,7 +30,7 @@ Vue.use(GlobalDirectives);
 Vue.use(Notifications);
 
 Vue.material.config = {
-  validation: false
+  validation: false,
 };
 /* eslint-disable no-new */
 new Vue({

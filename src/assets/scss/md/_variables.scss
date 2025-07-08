@@ -120,9 +120,7 @@ $font-size-small: 12px !default;
 //** Unit-less `line-height` for use in components like buttons.
 $line-height-base: 1.428571429 !default; // 20/14
 //** Computed "line-height" (`font-size` * `line-height`) for use with `margin`, `padding`, etc.
-$line-height-computed: floor(
-  ($font-size-base * $line-height-base)
-) !default; // ~20px
+$line-height-computed: floor(($font-size-base * $line-height-base)) !default; // ~20px
 
 //** By default, this inherits from the `<body>`.
 $headings-font-family: inherit !default;
@@ -138,11 +136,7 @@ $headings-color: inherit !default;
 
 // [converter] If $bootstrap-sass-asset-helper if used, provide path relative to the assets load path.
 // [converter] This is because some asset helpers, such as Sprockets, do not work with file-relative paths.
-$icon-font-path: if(
-  $bootstrap-sass-asset-helper,
-  "bootstrap/",
-  "../fonts/bootstrap/"
-) !default;
+$icon-font-path: if($bootstrap-sass-asset-helper, "bootstrap/", "../fonts/bootstrap/") !default;
 
 //** File name for all font files.
 $icon-font-name: "glyphicons-halflings-regular" !default;
@@ -272,19 +266,11 @@ $input-border-focus: #66afe9 !default;
 $input-color-placeholder: #999 !default;
 
 //** Default `.form-control` height
-$input-height-base: (
-  $line-height-computed + ($padding-base-vertical * 2) + 2
-) !default;
+$input-height-base: ($line-height-computed + ($padding-base-vertical * 2) + 2) !default;
 //** Large `.form-control` height
-$input-height-large: (
-  ceil($font-size-large * $line-height-large) + ($padding-large-vertical * 2) +
-    2
-) !default;
+$input-height-large: (ceil($font-size-large * $line-height-large) + ($padding-large-vertical * 2) + 2) !default;
 //** Small `.form-control` height
-$input-height-small: (
-  floor($font-size-small * $line-height-small) + ($padding-small-vertical * 2) +
-    2
-) !default;
+$input-height-small: (floor($font-size-small * $line-height-small) + ($padding-small-vertical * 2) + 2) !default;
 
 //** `.form-group` margin
 $form-group-margin-bottom: 15px !default;
@@ -429,9 +415,7 @@ $navbar-height: 50px !default;
 $navbar-margin-bottom: $line-height-computed !default;
 $navbar-border-radius: $border-radius-base !default;
 $navbar-padding-horizontal: floor(($grid-gutter-width * 0.5)) !default;
-$navbar-padding-vertical: (
-  ($navbar-height - $line-height-computed) * 0.5
-) !default;
+$navbar-padding-vertical: (($navbar-height - $line-height-computed) * 0.5) !default;
 $navbar-collapse-max-height: 340px !default;
 
 $navbar-default-color: #777 !default;
@@ -449,10 +433,7 @@ $navbar-default-link-disabled-bg: transparent !default;
 
 // Navbar brand label
 $navbar-default-brand-color: $navbar-default-link-color !default;
-$navbar-default-brand-hover-color: darken(
-  $navbar-default-brand-color,
-  10%
-) !default;
+$navbar-default-brand-hover-color: darken($navbar-default-brand-color, 10%) !default;
 $navbar-default-brand-hover-bg: transparent !default;
 
 // Navbar toggle
@@ -622,10 +603,7 @@ $popover-arrow-outer-width: ($popover-arrow-width + 1) !default;
 //** Popover outer arrow color
 $popover-arrow-outer-color: fade_in($popover-border-color, 0.05) !default;
 //** Popover outer arrow fallback color
-$popover-arrow-outer-fallback-color: darken(
-  $popover-fallback-border-color,
-  20%
-) !default;
+$popover-arrow-outer-fallback-color: darken($popover-fallback-border-color, 20%) !default;
 
 //== Labels
 //
@@ -953,9 +931,7 @@ $mdb-input-font-size-small: ceil(($font-size-base * 0.75)) !default; // ~12px
 
 $mdb-input-line-height-base: $line-height-base; //1.428571429 !default; // 20/14
 //** Computed "line-height" (`font-size` * `line-height`) for use with `margin`, `padding`, etc.
-$mdb-input-line-height-computed: floor(
-  ($mdb-input-font-size-base * $mdb-input-line-height-base)
-) !default; // ~20px
+$mdb-input-line-height-computed: floor(($mdb-input-font-size-base * $mdb-input-line-height-base)) !default; // ~20px
 $mdb-input-line-height-large: 1.3333333 !default; // extra decimals for Win 8.1 Chrome
 $mdb-input-line-height-small: 1.5 !default;
 
@@ -983,18 +959,14 @@ $mdb-input-border-radius-large: 0 !default;
 $mdb-input-border-radius-small: 0 !default;
 
 //** Default `.form-control` height
-$mdb-input-height-base: (
-  $mdb-input-line-height-computed + ($mdb-input-padding-base-vertical * 2) + 2
-) !default;
+$mdb-input-height-base: ($mdb-input-line-height-computed + ($mdb-input-padding-base-vertical * 2) + 2) !default;
 //** Large `.form-control` height
 $mdb-input-height-large: (
-  ceil($mdb-input-font-size-large * $mdb-input-line-height-large) +
-    ($mdb-input-padding-large-vertical * 2) + 2
+  ceil($mdb-input-font-size-large * $mdb-input-line-height-large) + ($mdb-input-padding-large-vertical * 2) + 2
 ) !default;
 //** Small `.form-control` height
 $mdb-input-height-small: (
-  floor($mdb-input-font-size-small * $mdb-input-line-height-small) +
-    ($mdb-input-padding-small-vertical * 2) + 2
+  floor($mdb-input-font-size-small * $mdb-input-line-height-small) + ($mdb-input-padding-small-vertical * 2) + 2
 ) !default;
 
 // Card
@@ -1053,8 +1025,7 @@ $mdb-shadow-key-umbra-opacity: 0.2 !default;
 $mdb-shadow-key-penumbra-opacity: 0.14 !default;
 $mdb-shadow-ambient-shadow-opacity: 0.12 !default;
 
-$fancy-shadow: 0 13px 39px -10px rgba(0, 0, 0, 0.65),
-  0 1px 25px 0px rgba(0, 0, 0, 0.15);
+$fancy-shadow: 0 13px 39px -10px rgba(0, 0, 0, 0.65), 0 1px 25px 0px rgba(0, 0, 0, 0.15);
 
 $general-transition-time: 300ms !default;
 
