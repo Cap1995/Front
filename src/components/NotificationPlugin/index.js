@@ -39,11 +39,9 @@ var NotificationsPlugin = {
         },
       },
     });
-    Object.defineProperty(Vue.prototype, "$notify", {
-      get() {
-        return this.$root.notify;
-      },
-    });
+    Vue.prototype.$notify = function (notification) {
+      NotificationStore.notify(notification);
+    };
     Object.defineProperty(Vue.prototype, "$notifications", {
       get() {
         return this.$root.notificationStore;

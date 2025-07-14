@@ -20,6 +20,10 @@
         <md-icon>notifications</md-icon>
         <p>Notificationes</p>
       </sidebar-link>
+      <sidebar-link to="#" @click.native="logout">
+        <md-icon>exit_to_app</md-icon>
+        <p>Cerrar sesión</p>
+      </sidebar-link>
     </side-bar>
 
     <div class="main-panel">
@@ -42,6 +46,12 @@ export default {
       sidebarBackground: "green",
       sidebarBackgroundImage: require("@/assets/img/sidebar-2.jpg"),
     };
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem("token");
+      this.$router.push("/login");
+    },
   },
 };
 </script>

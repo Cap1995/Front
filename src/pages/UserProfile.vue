@@ -193,51 +193,44 @@
       </md-dialog-actions>
     </md-dialog>
 
-    <!-- Modal apoyos academicos -->
     <md-dialog
       :md-active="mostrarModalApoyoAcademico"
       @md-closed="mostrarModalApoyoAcademico = false"
       class="rounded-xl overflow-hidden shadow-2xl"
     >
+      <!-- Título -->
       <md-dialog-title
         class="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 px-4 flex items-center gap-2"
       >
         📚 Información de Apoyo Académico
       </md-dialog-title>
 
-      <md-dialog-content class="bg-white px-4 py-3">
-        <div class="mb-4">
-          <label class="block text-xs font-semibold text-gray-700 mb-1">¿Está recibiendo apoyo?</label>
-          <select
-            v-model="formAcademico.estaRecibiendoApoyo"
-            class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:outline-none focus:ring focus:border-blue-400 transition"
-          >
+      <!-- Contenido del modal -->
+      <md-dialog-content class="custom-modal-content-academico">
+        <div>
+          <label>¿Está recibiendo apoyo?</label>
+          <select v-model="formAcademico.estaRecibiendoApoyo">
             <option :value="1">Sí</option>
             <option :value="0">No</option>
           </select>
         </div>
 
-        <div class="mb-4">
-          <label class="block text-xs font-semibold text-gray-700 mb-1">Nombre del profesional</label>
-          <input
-            type="text"
-            v-model="formAcademico.nombreProfesional"
-            placeholder="Ej: Prof. Juan Pérez"
-            class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:outline-none focus:ring focus:border-blue-400 transition"
-          />
+        <div>
+          <label>Nombre del profesional</label>
+          <input type="text" v-model="formAcademico.nombreProfesional" placeholder="Ej: Prof. Juan Pérez" />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">Cantenido Apoyado</label>
+          <label>Contenido apoyado</label>
           <textarea
             v-model="formAcademico.observaciones"
             rows="3"
             placeholder="Ingresa tus observaciones aquí"
-            class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:outline-none focus:ring focus:border-blue-400 transition resize-none"
           ></textarea>
         </div>
       </md-dialog-content>
 
+      <!-- Acciones -->
       <md-dialog-actions class="flex justify-end gap-2 p-4 bg-gray-50">
         <md-button
           class="md-primary md-raised text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white transition"
@@ -283,13 +276,12 @@
       </md-dialog-actions>
     </md-dialog>
 
-    <!-- Modal factores de atención psicológica -->
     <md-dialog
       :md-active="mostrarModalFactoresPsico"
       @md-closed="mostrarModalFactoresPsico = false"
       class="rounded-xl overflow-hidden shadow-2xl"
     >
-      <!-- Cabecera del modal -->
+      <!-- Título -->
       <md-dialog-title
         class="bg-gradient-to-r from-purple-600 to-purple-800 text-white font-bold py-3 px-4 flex items-center gap-2"
       >
@@ -297,40 +289,27 @@
       </md-dialog-title>
 
       <!-- Contenido del modal -->
-      <md-dialog-content class="bg-white px-4 py-3">
-        <div class="mb-4">
-          <label class="block text-xs font-semibold text-gray-700 mb-1">¿Está recibiendo apoyo?</label>
-          <select
-            v-model="formPsico.estaRecibiendoApoyo"
-            class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:outline-none focus:ring focus:border-purple-400 transition"
-          >
+      <md-dialog-content class="custom-modal-content">
+        <div>
+          <label>¿Está recibiendo apoyo?</label>
+          <select v-model="formPsico.estaRecibiendoApoyo">
             <option :value="1">Sí</option>
             <option :value="0">No</option>
           </select>
         </div>
 
-        <div class="mb-4">
-          <label class="block text-xs font-semibold text-gray-700 mb-1">Nombre del profesional</label>
-          <input
-            type="text"
-            v-model="formPsico.nombreProfesional"
-            placeholder="Ej: Dra. María Pérez"
-            class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:outline-none focus:ring focus:border-purple-400 transition"
-          />
+        <div>
+          <label>Nombre del profesional</label>
+          <input type="text" v-model="formPsico.nombreProfesional" placeholder="Ej: Dra. María Pérez" />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">Observaciones</label>
-          <textarea
-            v-model="formPsico.observaciones"
-            rows="3"
-            placeholder="Ingresa tus observaciones aquí"
-            class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:outline-none focus:ring focus:border-purple-400 transition resize-none"
-          ></textarea>
+          <label>Observaciones</label>
+          <textarea v-model="formPsico.observaciones" rows="3" placeholder="Ingresa tus observaciones aquí"></textarea>
         </div>
       </md-dialog-content>
 
-      <!-- Acciones del modal -->
+      <!-- Acciones -->
       <md-dialog-actions class="flex justify-end gap-2 p-4 bg-gray-50">
         <md-button
           class="md-primary md-raised text-xs font-medium bg-purple-600 hover:bg-purple-700 text-white transition"
@@ -411,15 +390,6 @@ export default {
         this.notas = [];
         this.mostrarNotas = true;
       }
-      // try {
-      //   const res = await fetch(`http://localhost:8000/notas/${this.rut}`);
-      //   this.notas = await res.json();
-      //   this.mostrarNotas = true;
-      // } catch (error) {
-      //   console.error('❌ Error al obtener notas:', error);
-      //   this.notas = [];
-      //   this.mostrarNotas = true;
-      // }
     },
     verFactoresPsicologicos() {
       // Procesar el string de motivos para crear un array
@@ -461,27 +431,6 @@ export default {
         console.error("❌ Error al guardar información:", error);
         alert("❌ Error al guardar información.");
       }
-      // try{
-      //   const payload = {
-      //     rut: this.rut,
-      //     nivel_riesgo: this.nivelRiesgoPsico,
-      //     esta_apoyo: this.formPsico.estaRecibiendoApoyo,
-      //     profesional: this.formPsico.nombreProfesional,
-      //     observaciones: this.formPsico.observaciones
-      //   };
-
-      //   await fetch('http://localhost:8000/registrar_factores_psicologicos/',{
-      //     method: 'POST',
-      //     headers: {'Content-Type': 'application/json'},
-      //     body: JSON.stringify(payload)
-      //   });
-
-      //   this.mostrarModalFactoresPsico = false;
-      //   alert('✅ Información registrada correctamente.');
-      // }catch(error){
-      //   console.error('❌ Error al guardar información:', error);
-      //   alert('❌ Error al guardar información.');
-      // }
     },
 
     async descargarReporte(rut) {
@@ -519,29 +468,90 @@ export default {
         console.error("❌ Error al registrar apoyo académico:", error);
         alert("❌ Error al registrar apoyo académico.");
       }
-      // try{
-      //   const payload = {
-      //     rut: this.rut,
-      //     nivel_riesgo: this.nivelRiesgoAcademico,
-      //     esta_apoyo: this.formAcademico.estaRecibiendoApoyo,
-      //     profesional: this.formAcademico.nombreProfesional,
-      //     observaciones: this.formAcademico.observaciones
-      //   };
-
-      //   await fetch('http://localhost:8000/registrar_factores_academicos/', {
-      //     method: 'POST',
-      //     headers: {'Content-Type': 'application/json'},
-      //     body: JSON.stringify(payload)
-      //   });
-
-      //   this.mostrarModalFactoresAcademicos = false;
-      //   alert('✅ Apoyo académico registrado correctamente.');
-
-      // }catch(error){
-      //   console.error('❌ Error al registrar apoyo académico:', error);
-      //   alert('❌ Error al registrar apoyo académico.');
-      // }
     },
   },
 };
 </script>
+<style scope>
+.custom-modal-content {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.custom-modal-content label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.custom-modal-content select,
+.custom-modal-content input,
+.custom-modal-content textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  transition: border 0.3s, box-shadow 0.3s;
+  margin-bottom: 16px;
+}
+
+.custom-modal-content select:focus,
+.custom-modal-content input:focus,
+.custom-modal-content textarea:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+  outline: none;
+}
+
+.custom-modal-content textarea {
+  resize: none;
+}
+
+.custom-modal-content-academico {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.custom-modal-content-academico label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.custom-modal-content-academico select,
+.custom-modal-content-academico input,
+.custom-modal-content-academico textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  transition: border 0.3s, box-shadow 0.3s;
+  margin-bottom: 16px;
+}
+
+.custom-modal-content-academico select:focus,
+.custom-modal-content-academico input:focus,
+.custom-modal-content-academico textarea:focus {
+  border-color: #3b82f6; /* azul */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+.custom-modal-content-academico textarea {
+  resize: none;
+}
+</style>
