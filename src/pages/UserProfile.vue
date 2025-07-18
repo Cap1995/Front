@@ -164,28 +164,31 @@
       <md-dialog-title class="bg-blue-600 text-white font-bold py-2 px-4 rounded-t-xl">
         📚 Notas del estudiante
       </md-dialog-title>
-      <md-dialog-content>
+
+      <md-dialog-content class="custom-modal-content-notas">
         <div v-if="notas.length">
-          <table class="min-w-full border rounded-lg overflow-hidden text-sm text-left">
-            <thead class="bg-gray-100 text-gray-700 font-semibold">
+          <table>
+            <thead>
               <tr>
-                <th class="py-2 px-3 border-b">Actividad</th>
-                <th v-for="i in 6" :key="i" class="py-2 px-3 border-b">Nota {{ i }}</th>
+                <th>Actividad</th>
+                <th v-for="i in 6" :key="i">Nota {{ i }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(fila, index) in notas" :key="index" class="hover:bg-gray-50 transition">
-                <td class="py-2 px-3 border-b">{{ fila["Denominación Actividad Curricular"] }}</td>
-                <td v-for="i in 6" :key="i" class="py-2 px-3 border-b">{{ fila["Nota_" + i] || "-" }}</td>
+              <tr v-for="(fila, index) in notas" :key="index">
+                <td>{{ fila["Denominación Actividad Curricular"] }}</td>
+                <td v-for="i in 6" :key="i">{{ fila["Nota_" + i] || "-" }}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p v-else class="text-gray-500">No se encontraron notas para este estudiante.</p>
+        <p v-else class="mensaje-vacio">No se encontraron notas para este estudiante.</p>
       </md-dialog-content>
-      <md-dialog-actions>
+
+      <md-dialog-actions style="padding: 16px; display: flex; justify-content: flex-end; background-color: #f9fafb">
         <md-button
-          class="md-raised text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 transition"
+          class="md-raised"
+          style="background-color: #e5e7eb; color: #374151; font-weight: 500; border-radius: 6px"
           @click="mostrarNotas = false"
         >
           Cerrar
@@ -248,25 +251,36 @@
     </md-dialog>
 
     <!-- Modal factores psicológicos bajos -->
-    <md-dialog :md-active="mostrarFactoresPsicologicos" @md-closed="mostrarFactoresPsicologicos = false">
-      <md-dialog-title class="bg-purple-600 text-white font-bold py-2 px-4 rounded-t-xl">
+    <md-dialog
+      :md-active="mostrarFactoresPsicologicos"
+      @md-closed="mostrarFactoresPsicologicos = false"
+      class="rounded-xl overflow-hidden shadow-2xl"
+    >
+      <!-- Título del modal -->
+      <md-dialog-title
+        class="bg-gradient-to-r from-purple-600 to-purple-800 text-white font-bold py-3 px-4 flex items-center gap-2"
+      >
         🧠 Factores psicológicos bajos
       </md-dialog-title>
-      <md-dialog-content>
-        <table class="min-w-full text-sm border-collapse border border-gray-300">
-          <thead class="bg-gray-100">
+
+      <!-- Contenido -->
+      <md-dialog-content class="custom-modal-table">
+        <table>
+          <thead>
             <tr>
-              <th class="border p-2">Área Psicológica</th>
+              <th>Área Psicológica</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(factor, index) in factoresPsicologicosBajos" :key="index">
-              <td class="border p-2">{{ factor }}</td>
+              <td>{{ factor }}</td>
             </tr>
           </tbody>
         </table>
       </md-dialog-content>
-      <md-dialog-actions>
+
+      <!-- Acciones -->
+      <md-dialog-actions class="flex justify-end gap-2 p-4 bg-gray-50">
         <md-button
           class="md-raised text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 transition"
           @click="mostrarFactoresPsicologicos = false"
@@ -399,17 +413,21 @@ export default {
       this.mostrarFactoresPsicologicos = true;
     },
     colorRiesgo(nivel) {
+      const limpio = (nivel || "").toString().trim().toLowerCase();
       return {
-        "text-green-600": nivel === "Bajo",
-        "text-yellow-600": nivel === "Medio",
-        "text-red-600": nivel === "Alto",
-        "text-gray-600": !nivel || nivel === "-",
+        "text-green-600": limpio === "bajo",
+        "text-yellow-600": limpio === "medio",
+        "text-red-600": limpio === "alto",
+        "text-gray-600": !limpio || limpio === "-" || limpio === "no clasificado" || limpio === "pendiente",
       };
     },
     iconoRiesgo(nivel) {
-      if (nivel === "Bajo") return "🟢";
-      if (nivel === "Medio") return "🟡";
-      if (nivel === "Alto") return "🔴";
+      const limpio = (nivel || "").toString().trim().toLowerCase();
+
+      if (limpio === "bajo") return "🟢";
+      if (limpio === "medio") return "🟡";
+      if (limpio === "alto") return "🔴";
+      if (limpio === "no clasificado" || limpio === "pendiente") return "⚠️";
       return "⚪";
     },
 
@@ -553,5 +571,82 @@ export default {
 
 .custom-modal-content-academico textarea {
   resize: none;
+}
+
+.custom-modal-content-notas {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  font-family: "Segoe UI", sans-serif;
+  overflow-x: auto;
+}
+
+.custom-modal-content-notas table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.custom-modal-content-notas thead {
+  background-color: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+}
+
+.custom-modal-content-notas th,
+.custom-modal-content-notas td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.custom-modal-content-notas tr:hover {
+  background-color: #f9fafb;
+  transition: background-color 0.2s ease;
+}
+
+.custom-modal-content-notas .mensaje-vacio {
+  color: #6b7280;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+.custom-modal-table {
+  background-color: #ffffff;
+  padding: 24px;
+  font-family: "Segoe UI", sans-serif;
+  border-radius: 0 0 16px 16px;
+}
+
+.custom-modal-table table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.custom-modal-table thead {
+  background-color: #f9fafb;
+}
+
+.custom-modal-table th {
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+  color: #4b5563;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.custom-modal-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #374151;
+  background-color: #fff;
+}
+
+.custom-modal-table tr:hover td {
+  background-color: #f9f9ff;
 }
 </style>
