@@ -160,7 +160,7 @@
     </md-dialog>
 
     <!-- Modal notas -->
-    <md-dialog :md-active="mostrarNotas" @md-closed="mostrarNotas = false">
+    <!-- <md-dialog :md-active="mostrarNotas" @md-closed="mostrarNotas = false">
       <md-dialog-title class="bg-blue-600 text-white font-bold py-2 px-4 rounded-t-xl">
         📚 Notas del estudiante
       </md-dialog-title>
@@ -183,6 +183,53 @@
           </table>
         </div>
         <p v-else class="mensaje-vacio">No se encontraron notas para este estudiante.</p>
+      </md-dialog-content>
+
+      <md-dialog-actions style="padding: 16px; display: flex; justify-content: flex-end; background-color: #f9fafb">
+        <md-button
+          class="md-raised"
+          style="background-color: #e5e7eb; color: #374151; font-weight: 500; border-radius: 6px"
+          @click="mostrarNotas = false"
+        >
+          Cerrar
+        </md-button>
+      </md-dialog-actions>
+    </md-dialog> -->
+    <md-dialog :md-active="mostrarNotas" @md-closed="mostrarNotas = false">
+      <md-dialog-title class="bg-blue-600 text-white font-bold py-2 px-4 rounded-t-xl">
+        📚 Notas del estudiante
+      </md-dialog-title>
+
+      <md-dialog-content class="custom-modal-content-notas">
+        <div v-if="notas.length">
+          <table class="min-w-full border-collapse border border-gray-300 text-sm">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="border p-2">Año</th>
+                <th class="border p-2">Periodo</th>
+                <th class="border p-2">Actividad Curricular</th>
+                <th class="border p-2">Nota Final</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(fila, index) in notas" :key="index">
+                <td class="border p-2">{{ fila.Año }}</td>
+                <td class="border p-2">{{ fila.Periodo }}</td>
+                <td class="border p-2">{{ fila.Asignatura }}</td>
+                <td
+                  class="border p-2 font-semibold text-center"
+                  :class="{
+                    'text-green-600': parseFloat(fila.NotaFinal) >= 4.0,
+                    'text-red-600': parseFloat(fila.NotaFinal) < 4.0,
+                  }"
+                >
+                  {{ fila.NotaFinal || "-" }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p v-else class="mensaje-vacio text-gray-500 italic mt-2">No se encontraron notas para este estudiante.</p>
       </md-dialog-content>
 
       <md-dialog-actions style="padding: 16px; display: flex; justify-content: flex-end; background-color: #f9fafb">

@@ -14,7 +14,7 @@
       </sidebar-link>
       <sidebar-link to="/table">
         <md-icon>content_paste</md-icon>
-        <p>Registro de Estudiantes</p>
+        <p>Registro de Monitoreo</p>
       </sidebar-link>
       <sidebar-link to="/notifications">
         <md-icon>notifications</md-icon>
