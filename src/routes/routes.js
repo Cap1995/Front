@@ -6,13 +6,18 @@ import TableList from "@/pages/TableList.vue";
 import Notifications from "@/pages/Notifications.vue";
 
 const routes = [
+  // 👇 raíz siempre al login; la lógica de token la maneja el beforeEach
+  { path: "/", redirect: "/login" },
+
+  // 👤 Login público
   {
-    path: "/",
-    redirect: () => {
-      const token = localStorage.getItem("token");
-      return token ? "/dashboard" : "/login";
-    },
+    path: "/login",
+    name: "Login",
+    meta: { guest: true }, // 👈 importante
+    component: () => import("@/components/Login.vue"),
   },
+
+  // 🔒 Rutas protegidas bajo el layout
   {
     path: "/",
     component: DashboardLayout,
@@ -43,11 +48,9 @@ const routes = [
       },
     ],
   },
-  {
-    path: "/login",
-    name: "Login",
-    component: () => import("@/components/Login.vue"),
-  },
+
+  // 🧯 catch-all
+  { path: "*", redirect: "/login" },
 ];
 
 export default routes;

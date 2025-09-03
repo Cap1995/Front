@@ -1,35 +1,36 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import routes from "./routes"; // o desde donde definas tus rutas
+import routes from "./routes";
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
   routes,
-  mode: "hash", // 👈 ya estás usando hash, esto lo confirma
+  mode: "hash",
   linkExactActiveClass: "nav-item active",
 });
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token");
 
-  // 🔐 Rutas protegidas
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
+  // 🔐 Bloquea /dashboard si no hay token
+  if (to.matched.some((r) => r.meta.requiresAuth)) {
     if (!token) {
-      next("/login");
-    } else {
-      next();
+      return next({ path: "/login", query: { redirect: to.fullPath } });
     }
-  } else if (to.path === "/") {
-    // 👇 Al acceder a raíz, decidir a dónde redirigir
-    if (token) {
-      next("/dashboard");
-    } else {
-      next("/login");
-    }
-  } else {
-    next();
   }
+
+  // 🚫 Evita ir a /login si ya hay token
+  if (to.matched.some((r) => r.meta.guest) && token) {
+    return next("/dashboard");
+  }
+
+  // 🌐 Al entrar a raíz decide según token
+  if (to.path === "/") {
+    return next(token ? "/dashboard" : "/login");
+  }
+
+  next();
 });
 
 export default router;
