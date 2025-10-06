@@ -23,6 +23,8 @@
 </template>
 
 <script>
+const BASE_URL = process.env.VUE_APP_API_URL || import.meta.env.VITE_API_URL;
+
 export default {
   name: "Login",
   data() {
@@ -36,7 +38,7 @@ export default {
     async login() {
       this.error = null;
       try {
-        const res = await fetch("http://localhost:5196/api/auth/login", {
+        const res = await fetch(`${BASE_URL}/api/auth/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -59,9 +61,13 @@ export default {
           this.$router.push("/dashboard");
         }
       } catch (err) {
+        console.error(err);
         this.error = "Error al conectar con el servidor";
       }
     },
+  },
+  created() {
+    console.log("API Base URL:", BASE_URL);
   },
 };
 </script>
@@ -73,7 +79,7 @@ export default {
   justify-content: center;
   height: 100vh;
   background: linear-gradient(to right, #4f46e5, #9333ea);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .login-card {
