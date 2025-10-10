@@ -30,6 +30,7 @@
     "@vue/cli-service": "5.0.8",
     "@vue/eslint-config-prettier": "7.1.0",
     "@vue/runtime-dom": "^3.5.17",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "cross-env": "^7.0.3",
     "es6-promise": "4.2.8",
     "eslint": "8.56.0",
