@@ -395,7 +395,7 @@ import {
   obtenerNotasPorRut,
   registrarFactoresPsicologicos,
   generarReportePDF,
-  registrarFactoresAcedmicos,
+  registrarFactoresAcademicos,
 } from "@/api/api";
 export default {
   data() {
