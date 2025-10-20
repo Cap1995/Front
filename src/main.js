@@ -15,6 +15,8 @@ import Notifications from "./components/NotificationPlugin";
 import MaterialDashboard from "./material-dashboard";
 
 import Chartist from "chartist";
+import '@fortawesome/fontawesome-free/css/all.min.css'
+
 
 // configure router
 // const router = new VueRouter({
